@@ -7,6 +7,7 @@ class Quizzler extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.grey.shade900,
         body: SafeArea(
@@ -27,6 +28,26 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   List<Widget> scoreKeeper = [];
+
+  void checkAnswer(bool pickedAnswer) {
+    setState(() {
+      bool correctAnswer = quizbrain.getCorrectAnswer();
+      if (correctAnswer == pickedAnswer) {
+        scoreKeeper.add(Icon(
+          Icons.check,
+          size: 15,
+          color: Colors.green,
+        ));
+      } else {
+        scoreKeeper.add(Icon(
+          Icons.close,
+          size: 15,
+          color: Colors.red,
+        ));
+      }
+      quizbrain.nextQuestion();
+    });
+  }
 
   QuizBrain quizbrain = QuizBrain();
 
@@ -66,15 +87,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                bool correctAnswer = quizbrain.getCorrectAnswer();
-                if (correctAnswer == true) {
-                  print(' you got it right');
-                } else {
-                  print('you got it wrong !');
-                }
-                setState(() {
-                  quizbrain.nextQuestion();
-                });
+                checkAnswer(true);
               },
             ),
           ),
@@ -92,15 +105,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                bool correctAnswer = quizbrain.getCorrectAnswer();
-                if (correctAnswer == true) {
-                  print(' you got it right');
-                } else {
-                  print('you got it wrong !');
-                }
-                setState(() {
-                  quizbrain.nextQuestion();
-                });
+                checkAnswer(false);
               },
             ),
           ),
